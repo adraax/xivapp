@@ -1,9 +1,17 @@
-#![warn(clippy::pedantic)]
-#![warn(clippy::restriction)]
+#![warn(clippy::pedantic, clippy::restriction)]
+#![allow(
+    clippy::allow_attributes_without_reason,
+    reason = "I'm not a masochist"
+)]
+#![allow(
+    clippy::blanket_clippy_restriction_lints,
+    clippy::implicit_return,
+    clippy::missing_docs_in_private_items
+)]
 
 use gpui::{
-    App, AppContext as _, ClickEvent, Context, Entity, IntoElement, ParentElement as _, Render,
-    Styled as _, Window, div, prelude::FluentBuilder as _,
+    App, AppContext as _, Context, Entity, IntoElement, ParentElement as _, Render, Styled as _,
+    Window, div, prelude::FluentBuilder as _,
 };
 use gpui_component::{
     Icon, IconName, StyledExt as _, h_flex,
@@ -19,6 +27,7 @@ pub struct HelloWorld {
 }
 
 impl Render for HelloWorld {
+    #[inline]
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         div().size_full().v_flex().child(
             Sidebar::new("sidebar")
@@ -37,7 +46,7 @@ impl Render for HelloWorld {
                 .footer(
                     SidebarToggleButton::new()
                         .collapsed(self.collapsed)
-                        .on_click(cx.listener(Self::handle_collapse)),
+                        .on_click(cx.listener(|this, _, _, _| this.collapsed = !this.collapsed)),
                 ),
         )
     }
@@ -48,17 +57,8 @@ impl HelloWorld {
         Self { collapsed: false }
     }
 
-    fn handle_collapse(
-        &mut self,
-        _event: &ClickEvent,
-        _window: &mut Window,
-        _cx: &mut Context<Self>,
-    ) {
-        self.collapsed = !self.collapsed;
-    }
-
-    fn view(window: &mut Window, cx: &mut App) -> Entity<Self> {
-        cx.new(|cx| Self::new(window, cx))
+    fn view(window: &mut Window, app: &mut App) -> Entity<Self> {
+        app.new(|cx| Self::new(window, cx))
     }
 }
 
@@ -68,10 +68,6 @@ fn main() {
         init(cx);
         cx.activate(true);
 
-        create_new_window(
-            "XIV Toolbox",
-            move |window, cx| HelloWorld::view(window, cx),
-            cx,
-        );
+        create_new_window("XIV Toolbox", HelloWorld::view, cx);
     });
 }

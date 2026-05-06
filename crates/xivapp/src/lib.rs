@@ -1,7 +1,7 @@
 use gpui::{
-    AnyView, App, AppContext, Bounds, Entity, FocusHandle, Focusable, InteractiveElement as _,
-    ParentElement, Pixels, Render, SharedString, Size, Styled as _, Window, WindowBounds,
-    WindowOptions, div, px, size,
+    AnyView, App, AppContext, Bounds, Context, Entity, FocusHandle, Focusable,
+    InteractiveElement as _, IntoElement, ParentElement, Pixels, Render, SharedString, Size,
+    Styled as _, Window, WindowBounds, WindowOptions, div, px, size,
 };
 use gpui_component::{Root, TitleBar, v_flex};
 
@@ -36,11 +36,7 @@ impl Focusable for AppRoot {
 }
 
 impl Render for AppRoot {
-    fn render(
-        &mut self,
-        window: &mut gpui::Window,
-        cx: &mut gpui::Context<Self>,
-    ) -> impl gpui::IntoElement {
+    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let sheet_layer = Root::render_sheet_layer(window, cx);
         let dialog_layer = Root::render_dialog_layer(window, cx);
         let notification_layer = Root::render_notification_layer(window, cx);

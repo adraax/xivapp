@@ -1,5 +1,10 @@
-use gpui::{Action, App, SharedString};
-use gpui_component::{ActiveTheme, Theme, ThemeMode, ThemeRegistry, scroll::ScrollbarShow};
+use gpui::{
+    Action, App,
+};
+use gpui::SharedString;
+use gpui_component::{
+    ActiveTheme, Theme, ThemeMode, ThemeRegistry, scroll::ScrollbarShow,
+};
 use serde::{Deserialize, Serialize};
 
 const STATE_FILE: &str = "target/state.json";
